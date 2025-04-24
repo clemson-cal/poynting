@@ -1,0 +1,89 @@
+[build-system]
+requires = [
+    "scikit-build-core>=0.7.0",
+    "setuptools>=42",
+    "wheel",
+    "pybind11>=2.10.0",
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "poynting"
+version = "0.1.0"
+description = ""
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Jonathan Zrake", email = "jzrake@clemson.edu" }]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: C++",
+]
+dependencies = ["numpy>=1.24.0", "scipy>=1.15.2"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.1.0",
+    "mypy>=1.4.0",
+    "ruff>=0.1.0",
+    "pre-commit>=3.3.0",
+    "black>=23.3.0",
+]
+docs = ["sphinx>=7.0.0", "sphinx-rtd-theme>=1.2.0", "myst-parser>=2.0.0"]
+examples = ["matplotlib>=3.7.0", "scipy>=1.10.0", "seaborn>=0.12.0"]
+[project.urls]
+"Homepage" = "https://github.com/clemson-cal/poynting"
+"Bug Tracker" = "https://github.com/clemson-cal/poynting/issues"
+
+[tool.scikit-build]
+cmake.version = ">=3.15"
+cmake.build-type = "Release"
+cmake.define = { CMAKE_EXPORT_COMPILE_COMMANDS = "ON" }
+wheel.packages = ["src/poynting"]
+wheel.license-files = ["LICENSE"]
+sdist.exclude = [
+    "*.so",
+    "*.dylib",
+    "*.dll",
+    "**/__pycache__",
+    "**/*.pyc",
+    "build",
+    "dist",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "--cov=poynting --cov-report=term-missing"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+strict_optional = true
+
+[[tool.mypy.overrides]]
+module = ["numpy.*"]
+ignore_missing_imports = true
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+select = ["E", "F", "B", "I", "N", "W", "C90", "PL", "UP"]
+ignore = []
+
+[tool.ruff.isort]
+known-first-party = ["poynting"]
+
+[tool.ruff.mccabe]
+max-complexity = 10
