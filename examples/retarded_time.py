@@ -1,6 +1,6 @@
 from matplotlib.pyplot import figure, show
 from numpy import *
-from poynting import *
+from poynting.ext.core._core import *
 
 c = 1.0
 

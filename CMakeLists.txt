@@ -29,12 +29,12 @@ endif()
 
 # Define the extension modules
 pybind11_add_module(_core MODULE
-    src/poynting/ext/core/_core.cpp
+    src/poynting/ext/_core.cpp
 )
 
 # Install the extension modules to the correct location
 install(TARGETS _core
-    DESTINATION ${SKBUILD_PROJECT_NAME}/ext/core
+    DESTINATION ${SKBUILD_PROJECT_NAME}/ext
 )
 
 # Output configuration information
