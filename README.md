@@ -34,7 +34,7 @@ S = poynting_vector(particle, t=0.5, x=10.0, y=0.0, z=0.0)
 print(f"Energy flux: {S.t}, direction: ({S.x}, {S.y}, {S.z})")
 
 # Calculate the time-averaged energy flux in the radial direction
-avg_flux = poynting_vector_time_avg(particle, x=10.0, y=0.0, z=5.0)
+avg_flux = time_averaged_energy_flux(particle, x=10.0, y=0.0, z=5.0)
 print(f"Time-averaged radial energy flux: {avg_flux}")
 ```
 
