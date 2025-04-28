@@ -193,7 +193,7 @@ def plot_angular_power_distribution(ax, omega=0.5, radius=100.0, normalize=False
     theta = linspace(0, pi, 1000)  # angle from z-axis (0 to π)
     x = radius * sin(theta)
     z = radius * cos(theta)
-    Sr = array([poynting_vector_time_avg(particle, x=x, z=z) for x, z in zip(x, z)])
+    Sr = array([time_averaged_energy_flux(particle, x=x, z=z) for x, z in zip(x, z)])
 
     dP_dOmega = Sr * radius**2
     if normalize:
