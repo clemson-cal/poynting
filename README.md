@@ -47,11 +47,10 @@ pip install poynting
 ## Technical Details
 
 Poynting implements:
-- Four-vector formalism for relativistic calculations
-- Retarded time calculations for proper causality
-- High-order finite difference methods (2nd, 4th, and 5th order available)
-- Numerical root-finding for retarded-time equations
-- Time integration for period averaging
+- Fully covariant formulation in C++ backend
+- Electromagnetic field tensor is derived from four-potential by numerical finite differencing; 2nd, 4th, and 5th order available
+- Numerical root-finding for retarded-time calculation implemented in C++
+- Accurate time averaging of energy flux based on high-order Gaussian quadrature
 
 ## License
 
