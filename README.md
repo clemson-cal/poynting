@@ -1,10 +1,10 @@
 # Poynting
 
-A high-performance library for calculating electromagnetic radiation from moving charges, with a focus on numerical accuracy and performance.
+Performant Python functions for calculating electromagnetic radiation from moving charges.
 
 ## About
 
-This project is authored by Jonathan Zrake as part of a graduate-level electromagnetic theory course at Clemson University. It can be used as a pedagogical tool to explore radiation from (relativistic) moving charges, and might have research applications in astrophysics and plasma physics.
+This project is authored by Jonathan Zrake as part of a graduate-level electromagnetic theory course at Clemson University. It can be used as a pedagogical tool to explore radiation from relativistic moving charges, and might have research applications in astrophysics and plasma physics.
 
 ## Overview
 
