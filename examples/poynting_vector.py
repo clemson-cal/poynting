@@ -2,6 +2,8 @@ from matplotlib.pyplot import *
 from matplotlib import rc
 from numpy import *
 from poynting import *
+
+
 def plot_poynting_vector_time_series(ax, omega=0.5, radius=10.0, latitude=0.0, normalize=False, **pl_args):
     """
     Plot the time series of the Poynting vector as a function of time.
@@ -72,6 +74,101 @@ def fig_poynting_vector_time_series(fig):
 
     # Adjust layout with no spacing between subplots
     fig.subplots_adjust(hspace=0)
+    fig.tight_layout(pad=0.1)
+    return fig
+
+
+def plot_poynting_vector_power_spectrum(ax, omega=0.5, radius=10.0, latitude=0.0, normalize=False, **pl_args):
+    """
+    Plot the power spectrum of the Poynting vector.
+    Parameters:
+    -----------
+    ax : matplotlib.axes.Axes
+        The axis instance to plot on
+    omega : float, optional
+        The angular frequency of the particle (default: 0.5)
+    radius : float, optional [lambda]
+        The radius at which to compute the Poynting vector (default: 10.0)
+    latitude : float, optional [deg]
+        The latitude at which to compute the Poynting vector (default: 0.0)
+    normalize : bool, optional
+        Whether to normalize the power spectrum (default: False)
+    **pl_args : dict
+        Additional plotting arguments passed to ax.plot()
+    """
+    radius *= 2 * pi / omega
+    particle = ParticleTrajectory(omega=omega)
+    t = linspace(0, 2 * pi / omega, 10000, endpoint=False)  # time
+    x = radius * cos(latitude * pi / 180)
+    z = radius * sin(latitude * pi / 180)
+    S = array([poynting_vector(particle, t=t, x=x, z=z) for t in t])
+    Sr = array([(S.x * x + S.z * z) / radius for S in S])
+
+    # Compute FFT
+    Sr_fft = fft.rfft(Sr)
+    Sr_squared = (Sr_fft * Sr_fft.conj()).real
+    freqs = fft.rfftfreq(len(t), t[1] - t[0])
+
+    if normalize:
+        Sr_squared /= max(Sr_squared)
+
+    ax.plot(freqs / omega * 2 * pi, Sr_squared, **pl_args)
+    ax.set_xlabel(r'Frequency ($\omega$)')
+    ax.set_ylabel(r'Power' + r' (normalized)' if normalize else '')
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    # ax.grid(True)
+
+
+def fig_poynting_vector_power_spectrum_multi_latitude(fig):
+    # Create subplots with zero vertical spacing between them
+    ax1 = fig.add_subplot(3, 1, 1)
+    ax2 = fig.add_subplot(3, 1, 2)
+    ax3 = fig.add_subplot(3, 1, 3)
+
+    # First subplot (15° latitude)
+    plot_poynting_vector_power_spectrum(ax1, omega=0.010, latitude=15, normalize=True, c='k', lw=1.0, label=r"$\omega \ell / c = 0.01$")
+    plot_poynting_vector_power_spectrum(ax1, omega=0.100, latitude=15, normalize=True, c='k', lw=1.0, label=r"$\omega \ell / c = 0.1$")
+    plot_poynting_vector_power_spectrum(ax1, omega=0.900, latitude=15, normalize=True, c='k', lw=1.5, label=r"$\omega \ell / c = 0.9$")
+    plot_poynting_vector_power_spectrum(ax1, omega=0.990, latitude=15, normalize=True, c='k', lw=2.0, label=r"$\omega \ell / c = 0.99$")
+    ax1.text(0.75, 0.85, r"Latitude 15°", transform=ax1.transAxes)
+    ax1.set_xticklabels([])
+    ax1.set_xlabel('')
+
+    # Second subplot (45° latitude)
+    plot_poynting_vector_power_spectrum(ax2, omega=0.010, latitude=45, normalize=True, c='k', lw=1.0, label=r"$\omega \ell / c = 0.01$")
+    plot_poynting_vector_power_spectrum(ax2, omega=0.100, latitude=45, normalize=True, c='k', lw=1.0, label=r"$\omega \ell / c = 0.1$")
+    plot_poynting_vector_power_spectrum(ax2, omega=0.900, latitude=45, normalize=True, c='k', lw=1.5, label=r"$\omega \ell / c = 0.9$")
+    plot_poynting_vector_power_spectrum(ax2, omega=0.990, latitude=45, normalize=True, c='k', lw=2.0, label=r"$\omega \ell / c = 0.99$")
+    ax2.text(0.75, 0.85, r"Latitude 45°", transform=ax2.transAxes)
+    ax2.set_xticklabels([])
+    ax2.set_xlabel('')
+
+    # Third subplot (75° latitude)
+    plot_poynting_vector_power_spectrum(ax3, omega=0.010, latitude=75, normalize=True, c='k', lw=1.0, label=r"$\omega \ell / c = 0.01$")
+    plot_poynting_vector_power_spectrum(ax3, omega=0.100, latitude=75, normalize=True, c='k', lw=1.0, label=r"$\omega \ell / c = 0.1$")
+    plot_poynting_vector_power_spectrum(ax3, omega=0.900, latitude=75, normalize=True, c='k', lw=1.5, label=r"$\omega \ell / c = 0.9$")
+    plot_poynting_vector_power_spectrum(ax3, omega=0.990, latitude=75, normalize=True, c='k', lw=2.0, label=r"$\omega \ell / c = 0.99$")
+
+    # Set y-axis limits for all plots
+    ax1.set_ylim(2e-10, 0.99)
+    ax2.set_ylim(2e-10, 0.99)
+    ax3.set_ylim(2e-10, 0.99)
+
+    ax3.text(0.75, 0.85, r"Latitude 75°", transform=ax3.transAxes)
+    ax1.legend(loc='lower right')
+
+    fig.subplots_adjust(hspace=0)
+    fig.tight_layout(pad=0.1)
+    return fig
+
+
+def fig_poynting_vector_power_spectrum(fig):
+    ax1 = fig.add_subplot(1, 1, 1)
+    plot_poynting_vector_power_spectrum(ax1, omega=0.10, latitude=45, normalize=True, c='k', lw=0.5, label=r"$\omega \ell / c = 0.1$")
+    plot_poynting_vector_power_spectrum(ax1, omega=0.40, latitude=45, normalize=True, c='k', lw=1.0, label=r"$\omega \ell / c = 0.4$")
+    plot_poynting_vector_power_spectrum(ax1, omega=0.80, latitude=45, normalize=True, c='k', lw=1.5, label=r"$\omega \ell / c = 0.8$")
+    plot_poynting_vector_power_spectrum(ax1, omega=0.99, latitude=45, normalize=True, c='k', lw=1.5, label=r"$\omega \ell / c = 0.99$")
     fig.tight_layout(pad=0.1)
     return fig
 
