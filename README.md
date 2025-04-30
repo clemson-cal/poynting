@@ -40,9 +40,11 @@ print(f"Time-averaged radial energy flux: {avg_flux}")
 
 ## Installation
 
+This package has not yet been published on PyPI, but you can install it from GitHub using pip:
 ```bash
-pip install poynting
+pip install git+https://github.com/clemson-cal/poynting.git
 ```
+You will require a C++ compiler and the CMake build system, because the extension module will be built from source. Wheels may be added in the future.
 
 ## Technical Details
 
