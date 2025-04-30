@@ -48,7 +48,7 @@ pip install poynting
 
 Poynting implements:
 - Fully covariant formulation in C++ backend
-- Electromagnetic field tensor is derived from four-potential by numerical finite differencing; 2nd, 4th, and 5th order available
+- Electromagnetic field tensor is derived from four-potential by numerical finite differencing; 2nd, 4th, and 6th order available
 - Numerical root-finding for retarded-time calculation implemented in C++
 - Accurate time averaging of energy flux based on high-order Gaussian quadrature
 
